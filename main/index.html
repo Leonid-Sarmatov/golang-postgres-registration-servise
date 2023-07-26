@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Login Page</title>
+  <style>
+    body {
+      background-color: #f1f1f1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+
+    .input-group label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .input-group input {
+      padding: 8px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+    }
+
+    .button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+  </style>
+  <script>
+    function registerUser() {
+      var login = document.getElementById("login").value;
+      var password = document.getElementById("password").value;
+      var favoriteGame = document.getElementById("favorite-game").value;
+
+      // Struct for response
+      var userData = {
+        login: login,
+        password: password,
+        favoriteGame: favoriteGame
+      };
+
+      var xhr = new XMLHttpRequest();
+
+      // Set server URL
+      xhr.open("POST", "http://localhost:8081/regResiverServer", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          
+          // Send data to server
+          xhr.send(JSON.stringify(userData));
+
+          var response = JSON.parse(xhr.responseText);
+
+          // Print response to console
+          console.log(response);          
+        }
+      };
+
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="input-group">
+      <label for="login">Login:</label>
+      <input type="text" id="login" placeholder="Enter your login">
+    </div>
+    <div class="input-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="Enter your password">
+    </div>
+    <div class="input-group">
+      <label for="favorite game">Favorite game:</label>
+      <input type="text" id="favorite-game" placeholder="Enter your favorite game">
+    </div>
+    <button class="button" onclick="registerUser()">Register</button>
+  </div>
+</body>
+</html>
