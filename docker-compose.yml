@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:15.3
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: "users"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "USPEH"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  reg-veb-site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: reg-veb-site
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    
+  

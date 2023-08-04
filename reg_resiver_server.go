@@ -6,8 +6,10 @@ import (
  "io/ioutil"
  "log"
  "os"
+ //"time"
  "net/http"
  "html_registration_web_site/sql_connector"
+ //"html_registration_web_site_2/sql_connector"
 )
 
 // Структура для json парсинга запроса
@@ -28,7 +30,10 @@ func main() {
     defer fmt.Println("stop!")
    
     // Запускаем соединение с базой данных
-    sql_connector.CreateNewSQLConnector("postgres", "USPEH", "users", "disable")
+    sql_connector.CreateNewSQLConnector()
+
+    // Созджаем таблицу с пользователями 
+    sql_connector.CreateUsersTableInDatabase()
     
     // Функция запуска сайта
     go regSite()
@@ -82,8 +87,9 @@ func regHandleRequest(w http.ResponseWriter, r *http.Request) {
             fmt.Println("Login:", person.Login)
             fmt.Println("Password:", person.Password)
             fmt.Println("Favorite game:", person.FavoriteGame)
-
+            
             var answer Answer
+            
             dbAnswer := sql_connector.ReadUserInfo(person.Login)
             if dbAnswer != "" {
 
@@ -94,11 +100,11 @@ func regHandleRequest(w http.ResponseWriter, r *http.Request) {
                 // Запись в базу данных
                 sql_connector.AddData(person.Login, person.Password, person.FavoriteGame)
 
-                answer.Text = "Successfull registration!"
+                answer.Text = "Successfull registration"
                 answer.FavoriteGame = "Cool game!"
             }
             
-
+            
             // Парсим в json структуру ответа
             responseJSON, err := json.Marshal(answer)
             if err != nil {
